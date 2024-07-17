@@ -55,14 +55,6 @@ export class MedialistPage implements OnInit {
           this.covers[currentMedia.title] = url;
         });
       });
-      this.slider.update();
-
-      // Workaround as the scrollbar handle isn't visible after the immediate update
-      // Seems like a size calculation issue, as resizing the browser window helps
-      // Better fix for this? 
-      window.setTimeout(() => {
-        this.slider.update();
-      }, 1000);
     });
 
     // Retreive data through subscription above
@@ -84,10 +76,6 @@ export class MedialistPage implements OnInit {
         this.playerService.say(clickedMedia.title);
       }
     });
-  }
-
-  slideDidChange() {
-    // console{}.log('Slide did change');
   }
 
   slidePrev() {

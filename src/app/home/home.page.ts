@@ -60,14 +60,6 @@ export class HomePage implements OnInit {
           this.covers[currentMedia.title] = url;
         });
       });
-      this.mediaSlider?.update();
-
-      // Workaround as the scrollbar handle isn't visible after the immediate update
-      // Seems like a size calculation issue, as resizing the browser window helps
-      // Better fix for this? 
-      window.setTimeout(() => {
-        this.mediaSlider?.update();
-      }, 1000);
     });
 
     this.mediaService.getArtists().subscribe(artists => {
@@ -78,14 +70,6 @@ export class HomePage implements OnInit {
           this.covers[artist.name] = url;
         });
       });
-      this.artistSlider?.update();
-
-      // Workaround as the scrollbar handle isn't visible after the immediate update
-      // Seems like a size calculation issue, as resizing the browser window helps
-      // Better fix for this? 
-      window.setTimeout(() => {
-        this.artistSlider?.update();
-      }, 1000);
     });
 
     this.update();

@@ -14,8 +14,8 @@ ion-card {
 }
 
 .circle-card {
-    width: 240px;
-    height: 240px;
+    width: 180px;
+    height: 180px;
     border-radius: 120px;
     border: 6px solid var(--ion-color-dark);
     margin-top: 32px;
@@ -24,19 +24,19 @@ ion-card {
 .title-card {
     margin-top: 20px;
     ion-card {
-        width: 200px;
+        width: 160px;
         height: 56px;
         --background: #262626;
     }
     padding-bottom: 21px;
 }
 
-ion-row.media-card {
+.media-card {
     padding-top: 35px;
     padding-bottom: 42px;
 
     ion-card {
-        width: 230px;
+        width: 180px;
         --background: #262626;
 
         ion-card-title {
