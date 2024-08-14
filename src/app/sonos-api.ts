@@ -1,7 +1,7 @@
 export interface SonosApiConfig {
     server: string;
     port: string;
-    rooms: string[];
+    room: string;
     tts?: {
         enabled?: boolean;
         language?: string;

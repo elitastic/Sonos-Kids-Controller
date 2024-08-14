@@ -9,11 +9,6 @@ const config = require('./server/config/config.json');
 
 app.use(cors());
 
-var spotifyApi = new SpotifyWebApi({
-    clientId: config.spotify.clientId,
-    clientSecret: config.spotify.clientSecret
-});
-
 // Configuration
 const dataFile = './server/config/data.json'
 
@@ -57,11 +52,21 @@ app.post('/api/delete', (req, res) => {
 
 app.get('/api/token', (req, res) => {
     // Retrieve an access token from Spotify
+    var spotifyApi = req.query.device === 'Basil'
+        ? new SpotifyWebApi({
+            clientId: config['spotify-elias'].clientId,
+            clientSecret: config['spotify-elias'].clientSecret
+        })
+        : new SpotifyWebApi({
+            clientId: config['spotify-andrea'].clientId,
+            clientSecret: config['spotify-andrea'].clientSecret
+        });
+
     spotifyApi.clientCredentialsGrant().then(
-        function(data) {
+        function (data) {
             res.status(200).send(data.body['access_token']);
         },
-        function(err) {
+        function (err) {
             console.log(
                 'Something went wrong when retrieving a new Spotify access token',
                 err.message
@@ -73,8 +78,12 @@ app.get('/api/token', (req, res) => {
 });
 
 app.get('/api/sonos', (req, res) => {
+    const configKey = req.query.device === 'Basil'
+        ? 'sonos-api-elias'
+        : 'sonos-api-andrea';
+
     // Send server address and port of the node-sonos-http-api instance to the client
-    res.status(200).send(config['node-sonos-http-api']);
+    res.status(200).send(config[configKey]);
 });
 
 // Catch all other routes and return the index file from Ionic app

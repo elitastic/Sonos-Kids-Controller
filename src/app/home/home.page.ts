@@ -7,6 +7,7 @@ import { PlayerService } from '../player.service';
 import { ActivityIndicatorService } from '../activity-indicator.service';
 import { Artist } from '../artist';
 import { Media } from '../media';
+import { SpotifyService } from '../spotify.service';
 
 @Component({
   selector: 'app-home',
@@ -17,7 +18,7 @@ export class HomePage implements OnInit {
   @ViewChild('artist_slider', { static: false }) artistSlider: IonSlides;
   @ViewChild('media_slider', { static: false }) mediaSlider: IonSlides;
 
-  category =  'audiobook';
+  category = 'audiobook';
 
   artists: Artist[] = [];
   media: Media[] = [];
@@ -44,11 +45,14 @@ export class HomePage implements OnInit {
     private mediaService: MediaService,
     private artworkService: ArtworkService,
     private playerService: PlayerService,
+    private spotifyService: SpotifyService,
     private activityIndicatorService: ActivityIndicatorService,
     private router: Router
-  ) {}
+  ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.spotifyService.refreshToken();
+
     this.mediaService.setCategory('audiobook');
 
     // Subscribe
@@ -94,7 +98,7 @@ export class HomePage implements OnInit {
     this.update();
   }
 
-  update() {
+  update() {
     if (this.category === 'audiobook' || this.category === 'music') {
       this.mediaService.publishArtists();
     } else {
@@ -119,7 +123,7 @@ export class HomePage implements OnInit {
 
   artistNameClicked(clickedArtist: Artist) {
     this.playerService.getConfig().subscribe(config => {
-      if (config.tts == null || config.tts.enabled === true) {
+      if (config.tts == null || config.tts.enabled === true) {
         this.playerService.say(clickedArtist.name);
       }
     });
@@ -136,7 +140,7 @@ export class HomePage implements OnInit {
 
   mediaNameClicked(clickedMedia: Media) {
     this.playerService.getConfig().subscribe(config => {
-      if (config.tts == null || config.tts.enabled === true) {
+      if (config.tts == null || config.tts.enabled === true) {
         this.playerService.say(clickedMedia.title);
       }
     });

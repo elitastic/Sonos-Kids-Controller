@@ -5,6 +5,7 @@ import { SonosApiConfig } from './sonos-api';
 import { environment } from '../environments/environment';
 import { Observable } from 'rxjs';
 import { publishReplay, refCount } from 'rxjs/operators';
+import { device } from 'src/device';
 
 export enum PlayerCmds {
   PLAY = 'play',
@@ -33,7 +34,7 @@ export class PlayerService {
     if (!this.config) {
       const url = (environment.production) ? '../api/sonos' : 'http://localhost:8200/api/sonos';
 
-      this.config = this.http.get<SonosApiConfig>(url).pipe(
+      this.config = this.http.get<SonosApiConfig>(url, { params: { device: device } }).pipe(
         publishReplay(1), // cache result
         refCount()
       );
@@ -116,7 +117,7 @@ export class PlayerService {
 
   private sendRequest(url: string) {
     this.getConfig().subscribe(config => {
-      const baseUrl = 'http://' + config.server + ':' + config.port + '/' + config.rooms[0] + '/';
+      const baseUrl = 'http://' + config.server + ':' + config.port + '/' + config.room + '/';
       this.http.get(baseUrl + url).subscribe();
     });
   }
