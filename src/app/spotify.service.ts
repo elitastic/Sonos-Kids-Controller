@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { SpotifyAlbumsResponse, SpotifyAlbumsResponseItem, SpotifyArtistsAlbumsResponse } from './spotify';
 import { Media } from './media';
+import { device } from 'src/device';
 
 declare const require: any;
 
@@ -131,13 +132,13 @@ export class SpotifyService {
     return artwork;
   }
 
-  refreshToken() {
+  async refreshToken() {
     const tokenUrl = (environment.production) ? '../api/token' : 'http://localhost:8200/api/token';
 
-    this.http.get(tokenUrl, {responseType: 'text'}).subscribe(token => {
-      this.spotifyApi.setAccessToken(token);
-      this.refreshingToken = false;
-    });
+    const token = await this.http.get(tokenUrl, { responseType: 'text', params: { device: device } }).toPromise();
+
+    this.spotifyApi.setAccessToken(token);
+    this.refreshingToken = false;
   }
 
   errorHandler(errors: Observable<any>) {

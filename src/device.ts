@@ -1,0 +1,1 @@
+export const device = !window.location.href.includes('lilly') ? 'Basil' : 'Lilly';
